@@ -39,6 +39,7 @@ public class TermDocumentMatrix {
             Map<String, Integer> termCountForDocument = documentToTermCounts.get(indexedDocuments.get(i));
             for (String term : allTerms) {
                 intMatrix[i][termIndex] = termCountForDocument.getOrDefault(term, 0);
+                termIndex++;
             }
         }
         return intMatrix;

@@ -55,4 +55,7 @@ public class MinHash {
         return numPerm ;
     }
 
+    public TermDocumentMatrix getTermDocumentMatrix() {
+        return termDocumentMatrix;
+    }
 }
