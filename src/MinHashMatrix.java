@@ -9,7 +9,7 @@ public class MinHashMatrix {
 
     public MinHashMatrix(TermDocumentMatrix termDocumentMatrix, int numPermutations) {
         minHashMatrix = new int[numPermutations][termDocumentMatrix.getDocuments().size()];
-        prime = (int) PrimeNumberUtils.getRandPrimeLargerThan(termDocumentMatrix.getTerms().size(), 10);
+        prime = (int) PrimeNumberUtils.getRandPrimeLargerThan(termDocumentMatrix.getTerms().size(), 10); //get random prime bigger than the number of terms?
         configurePermutationFunctions(numPermutations);
         createMinHashMatrix(termDocumentMatrix, numPermutations);
     }
@@ -20,7 +20,7 @@ public class MinHashMatrix {
 
         for (int i = 0; i < minHashMatrix.length; i++) {
             for (int j = 0; j < minHashMatrix[i].length; j++) {
-                minHashMatrix[i][j] = getMinHash(termMatrix, permutationFunctions.get(i), terms, j);
+                minHashMatrix[i][j] = getMinHash(termMatrix, permutationFunctions.get(i), terms, j); //This gets the min value for the i'th permutation for document j
             }
         }
     }
@@ -28,7 +28,7 @@ public class MinHashMatrix {
     private int getMinHash(int[][] termMatrix, Pair permutationFunction, List<String> terms, int documentIndex) {
         int min = Integer.MAX_VALUE;
         for (int i = 0; i < termMatrix.length; i++) {
-            if (termMatrix[i][documentIndex] > 0) {
+            if (termMatrix[i][documentIndex] > 0) { //for all term existences in this particular document, 1 if term exists
                 int value = terms.get(i).hashCode();
                 int hash = computePermutation(permutationFunction, value);
                 if (hash < min) {

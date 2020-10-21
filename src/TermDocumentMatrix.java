@@ -15,8 +15,8 @@ public class TermDocumentMatrix {
     public void indexTerms(File file, List<String> processedTerms) {
         indexedDocuments.add(file.getName());
         allTerms.addAll(processedTerms);
-        HashSet<String> termCounts = new HashSet<>(processedTerms);
-        documentToTermCounts.put(file.getName(), termCounts);
+        HashSet<String> termExistence = new HashSet<>(processedTerms);//store the terms that exist in this document.
+        documentToTermCounts.put(file.getName(), termExistence);
     }
 
     public List<String> getDocuments() {
@@ -33,6 +33,7 @@ public class TermDocumentMatrix {
             int termIndex = 0;
             HashSet<String> termCountForDocument = documentToTermCounts.get(indexedDocuments.get(i));
             for (String term : allTerms) {
+                //if this document contains the term, set term index to 1, otherwise 0.
                 intMatrix[termIndex][i] = termCountForDocument.contains(term) ? 1 : 0;
                 termIndex++;
             }
