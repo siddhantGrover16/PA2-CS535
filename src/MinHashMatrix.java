@@ -8,8 +8,8 @@ public class MinHashMatrix {
     int prime;
 
     public MinHashMatrix(TermDocumentMatrix termDocumentMatrix, int numPermutations) {
-        minHashMatrix = new int[termDocumentMatrix.getDocuments().size()][numPermutations];
-        prime = (int) PrimeNumberUtils.getRandPrimeLargerThan(termDocumentMatrix.getDocuments().size(), 10);
+        minHashMatrix = new int[numPermutations][termDocumentMatrix.getDocuments().size()];
+        prime = (int) PrimeNumberUtils.getRandPrimeLargerThan(termDocumentMatrix.getTerms().size(), 10);
         configurePermutationFunctions(numPermutations);
         createMinHashMatrix(termDocumentMatrix, numPermutations);
     }
@@ -18,17 +18,17 @@ public class MinHashMatrix {
         int[][] termMatrix = termDocumentMatrix.getIntMatrix();
         List<String> terms = termDocumentMatrix.getTerms();
 
-        for (int i = 0; i < termMatrix.length; i++) {
-            for (int j = 0; j < numPermutations; j++) {
-                minHashMatrix[i][j] = getMinHash(termMatrix[i], permutationFunctions.get(j), terms);
+        for (int i = 0; i < minHashMatrix.length; i++) {
+            for (int j = 0; j < minHashMatrix[i].length; j++) {
+                minHashMatrix[i][j] = getMinHash(termMatrix, permutationFunctions.get(i), terms, j);
             }
         }
     }
 
-    private int getMinHash(int[] termFrequencies, Pair permutationFunction, List<String> terms) {
+    private int getMinHash(int[][] termMatrix, Pair permutationFunction, List<String> terms, int documentIndex) {
         int min = Integer.MAX_VALUE;
-        for (int i = 0; i < termFrequencies.length; i++) {
-            if (termFrequencies[i] > 0) {
+        for (int i = 0; i < termMatrix.length; i++) {
+            if (termMatrix[i][documentIndex] > 0) {
                 int value = terms.get(i).hashCode();
                 int hash = computePermutation(permutationFunction, value);
                 if (hash < min) {
@@ -36,7 +36,6 @@ public class MinHashMatrix {
                 }
             }
         }
-
         return min;
     }
 
