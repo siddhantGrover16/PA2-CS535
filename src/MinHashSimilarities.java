@@ -13,14 +13,14 @@ public class MinHashSimilarities {
     int numPerm;
     int intersect = 0;
     int union = 0;
-    int sameMH;
+    int sameMH=0;
 
 
     public MinHashSimilarities(String folder, int numPermutations) {
         this.numPerm=numPermutations;
 
         minhash = new MinHash(folder, numPermutations);
-        tdMatrix = minhash.termDocumentMatrix.getIntMatrix();
+        tdMatrix = minhash.termDocumentMatrix.termDocumentMatrix();
         mhMatrix = minhash.minHashMatrix();
         indexedDocuments = minhash.termDocumentMatrix.getDocuments();
     }
@@ -43,7 +43,7 @@ public class MinHashSimilarities {
 //        System.out.println ("length is "+ tdMatrix.length);
 //        System.out.println("intersect is "+ intersect);
 //        System.out.println("union is "+ union);
-        eJacSim = (double)intersect / union;
+        eJacSim = ((double)intersect) / union;
         return eJacSim;
     }
 
@@ -62,7 +62,7 @@ public class MinHashSimilarities {
         }
        // System.out.println("num perm is "+ numPerm);
         //System.out.println(" same is " +sameMH );
-        aJacSim = (double)sameMH/numPerm;
+        aJacSim = ((double)sameMH)/numPerm;
 
         return aJacSim;
     }

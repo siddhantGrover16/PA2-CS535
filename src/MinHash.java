@@ -44,7 +44,7 @@ public class MinHash {
     }
 
     public int[][] termDocumentMatrix(){
-        return termDocumentMatrix.getIntMatrix();
+        return termDocumentMatrix.termDocumentMatrix();
     }
 
     public int numTerms(){

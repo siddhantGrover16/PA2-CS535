@@ -15,7 +15,7 @@ public class MinHashMatrix {
     }
 
     private void createMinHashMatrix(TermDocumentMatrix termDocumentMatrix, int numPermutations) {
-        int[][] termMatrix = termDocumentMatrix.getIntMatrix();
+        int[][] termMatrix = termDocumentMatrix.termDocumentMatrix();
         List<String> terms = termDocumentMatrix.getTerms();
 
         for (int i = 0; i < minHashMatrix.length; i++) {

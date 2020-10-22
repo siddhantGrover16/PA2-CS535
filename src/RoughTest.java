@@ -1,7 +1,8 @@
 public class RoughTest {
     public static void main(String[] args) {
 
-        MinHashSimilarities minHash = new MinHashSimilarities("TestFiles",6);
+        MinHashSimilarities minHash = new MinHashSimilarities("TestFiles",400
+        );
         int[][] tc =minHash.getTdMatrix();
         int[][] mh = minHash.getMhMatrix();
         int[] mhsig= minHash.minHashSig("baseball298.txt");
@@ -14,7 +15,7 @@ public class RoughTest {
 
 
 
-        for( int i=0; i<5;i++){//
+        for( int i=0; i< tc.length;i++){//
             for(int j =0 ;j<tc[0].length;j++){
                 System.out.print(tc[i][j]+ " ");
             }
