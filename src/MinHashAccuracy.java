@@ -1,6 +1,6 @@
 import java.util.List;
-public class MinHashAccuracy {
 
+public class MinHashAccuracy {
     MinHashSimilarities mhs ;
     int inaccuratePairs =0;
     double errorPar;
@@ -34,9 +34,5 @@ public class MinHashAccuracy {
 
         return inaccuratePairs;
     }
-
-
-
-
 
 }

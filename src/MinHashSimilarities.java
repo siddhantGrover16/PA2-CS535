@@ -1,19 +1,15 @@
+import java.io.FileNotFoundException;
 import java.util.LinkedHashSet;
 import java.util.List;
 
 public class MinHashSimilarities {
     int[][] tdMatrix;
     int[][] mhMatrix;
-    LinkedHashSet<String> allTerms;
     private List<String> indexedDocuments;
     MinHash minhash;
     double eJacSim;
     double aJacSim;
-    int [] mhSig;
     int numPerm;
-    int intersect = 0;
-    int union = 0;
-    int sameMH=0;
 
 
     public MinHashSimilarities(String folder, int numPermutations) {
@@ -34,7 +30,6 @@ public class MinHashSimilarities {
         return eJacSim;
     }
     public double computeEJac(int docindex1, int docindex2){
-
         int intersect = 0;
         int union = 0;
         int x_a;
@@ -61,22 +56,26 @@ public class MinHashSimilarities {
     }
 
     public double computeAJac(int docindex1, int docindex2){
-
+        int sameMinHashes = 0;
         for(int j =0 ; j< mhMatrix.length;j++){
             if (mhMatrix[j][docindex1]==mhMatrix[j][docindex2]){
-               sameMH+=1;
-             //  System.out.println("SAME at row "+ j );
+                sameMinHashes+=1;
+                //  System.out.println("SAME at row "+ j );
             }
         }
 
-        return ((double)sameMH)/numPerm;
+        return ((double)sameMinHashes)/numPerm;
     }
 
     public int[] minHashSig(String filename) {
-        int d1 = indexedDocuments.indexOf(filename);
-        mhSig = mhMatrix[d1];
-        return mhSig;
-
+        int docIndex = indexedDocuments.indexOf(filename);
+        int[] minHashSig = new int[mhMatrix.length];
+        if (docIndex >= 0) { //if its a valid filename.
+            for (int i = 0; i < mhMatrix.length; i++) {
+                minHashSig[i] = mhMatrix[i][docIndex];
+            }
+        }
+        return minHashSig;
     }
     public int getTermCount(){
         return minhash.numTerms();

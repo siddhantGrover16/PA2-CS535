@@ -4,39 +4,91 @@ import java.util.Random;
 
 public class MinHashMatrix {
     int[][] minHashMatrix;
+    int[][] termMatrix;
+    List<Integer> maxOccurrences;
     List<Pair> permutationFunctions;
-    int prime;
+    long prime;
 
     public MinHashMatrix(TermDocumentMatrix termDocumentMatrix, int numPermutations) {
         minHashMatrix = new int[numPermutations][termDocumentMatrix.getDocuments().size()];
-        prime = (int) PrimeNumberUtils.getRandPrimeLargerThan(termDocumentMatrix.getTerms().size(), 10); //get random prime bigger than the number of terms?
+        termMatrix = termDocumentMatrix.termDocumentMatrix();
+        maxOccurrences = getMaxOccurrences(termMatrix);
+        prime = (int) PrimeNumberUtils.getRandPrimeLargerThan(maxOccurrences.stream().reduce(0, Integer::sum), 10); //get random prime bigger than the number of terms?
+
         configurePermutationFunctions(numPermutations);
         createMinHashMatrix(termDocumentMatrix, numPermutations);
     }
 
     private void createMinHashMatrix(TermDocumentMatrix termDocumentMatrix, int numPermutations) {
-        int[][] termMatrix = termDocumentMatrix.termDocumentMatrix();
-        List<String> terms = termDocumentMatrix.getTerms();
+        List<List<Integer>> uniqueIds = getUniqueIds(termDocumentMatrix);
 
         for (int i = 0; i < minHashMatrix.length; i++) {
             for (int j = 0; j < minHashMatrix[i].length; j++) {
-                minHashMatrix[i][j] = getMinHash(termMatrix, permutationFunctions.get(i), terms, j); //This gets the min value for the i'th permutation for document j
+                minHashMatrix[i][j] = getMinHash(uniqueIds.get(j), permutationFunctions.get(i)); //This gets the min value for the i'th permutation for document j
             }
         }
     }
 
-    private int getMinHash(int[][] termMatrix, Pair permutationFunction, List<String> terms, int documentIndex) {
-        int min = Integer.MAX_VALUE;
+    private List<List<Integer>> getUniqueIds(TermDocumentMatrix termDocumentMatrix) {
+        List<List<Integer>> uniqueIds = new ArrayList<>();
+        for (int i = 0; i < termDocumentMatrix.getDocuments().size(); i++) {
+            uniqueIds.add(i, new ArrayList<>());
+        }
+        int maxSum = 0;
+        int uniqueId = 0;
         for (int i = 0; i < termMatrix.length; i++) {
-            if (termMatrix[i][documentIndex] > 0) { //for all term existences in this particular document, 1 if term exists
-                int value = terms.get(i).hashCode();
-                int hash = computePermutation(permutationFunction, value);
-                if (hash < min) {
-                    min = hash;
+            for (int j = 0; j < termMatrix[i].length; j++) {
+                uniqueId = maxSum + 1;
+                int termCount = termMatrix[i][j];
+                for (int k = 0; k < termCount; k++) {
+                    uniqueIds.get(j).add(uniqueId);
+                    uniqueId++;
                 }
+            }
+            maxSum += maxOccurrences.get(i);
+        }
+        return uniqueIds;
+    }
+
+    private List<Integer> getMaxOccurrences(int[][] termMatrix) {
+        List<Integer> maxOccurrences = new ArrayList<>();
+        int max;
+        for (int i = 0; i < termMatrix.length; i++) {
+            max = Integer.MIN_VALUE;
+            for (int j = 0; j < termMatrix[i].length; j++) {
+                int termCount = termMatrix[i][j];
+                if (termCount > max) {
+                    max = termCount;
+                }
+            }
+            maxOccurrences.add(max);
+        }
+        return maxOccurrences;
+    }
+
+    private int getMinHash(List<Integer> uniqueIds, Pair permutationFunction) {
+        int min = Integer.MAX_VALUE;
+        for (Integer uniqueId : uniqueIds) {
+            int hash = computePermutation(permutationFunction, uniqueId);
+            if (hash < min) {
+                min = hash;
             }
         }
         return min;
+    }
+
+    private List<Integer> getMaxOccurrencesForAllTerms(int[][] termMatrix) {
+        List<Integer> maxOccurrences = new ArrayList<>();
+        for (int[] matrix : termMatrix) {
+            int max = Integer.MIN_VALUE;
+            for (int termCount : matrix) {
+                if (termCount > max) {
+                    max = termCount;
+                }
+            }
+            maxOccurrences.add(max);
+        }
+        return maxOccurrences;
     }
 
     private void configurePermutationFunctions(int numPermutations) {
