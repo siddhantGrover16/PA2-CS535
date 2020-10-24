@@ -77,20 +77,6 @@ public class MinHashMatrix {
         return min;
     }
 
-    private List<Integer> getMaxOccurrencesForAllTerms(int[][] termMatrix) {
-        List<Integer> maxOccurrences = new ArrayList<>();
-        for (int[] matrix : termMatrix) {
-            int max = Integer.MIN_VALUE;
-            for (int termCount : matrix) {
-                if (termCount > max) {
-                    max = termCount;
-                }
-            }
-            maxOccurrences.add(max);
-        }
-        return maxOccurrences;
-    }
-
     private void configurePermutationFunctions(int numPermutations) {
         Random rand = new Random();
         permutationFunctions = new ArrayList<>();
