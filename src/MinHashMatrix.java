@@ -6,6 +6,7 @@ public class MinHashMatrix {
     int[][] minHashMatrix;
     int[][] termMatrix;
     List<Integer> maxOccurrences;
+    List<List<Integer>> uniqueIds;
     List<Pair> permutationFunctions;
     long prime;
 
@@ -13,15 +14,15 @@ public class MinHashMatrix {
         minHashMatrix = new int[numPermutations][termDocumentMatrix.getDocuments().size()];
         termMatrix = termDocumentMatrix.termDocumentMatrix();
         maxOccurrences = getMaxOccurrences(termMatrix);
-        prime = (int) PrimeNumberUtils.getRandPrimeLargerThan(maxOccurrences.stream().reduce(0, Integer::sum), 10); //get random prime bigger than the number of terms?
+        uniqueIds = getUniqueIds(termDocumentMatrix);
+        int primeSize = Math.max(maxOccurrences.stream().reduce(0, Integer::sum), numPermutations);
+        prime = (int) PrimeNumberUtils.getPrimeLargerThan(primeSize); //get random prime bigger than the number of terms?
 
         configurePermutationFunctions(numPermutations);
-        createMinHashMatrix(termDocumentMatrix, numPermutations);
+        createMinHashMatrix();
     }
 
-    private void createMinHashMatrix(TermDocumentMatrix termDocumentMatrix, int numPermutations) {
-        List<List<Integer>> uniqueIds = getUniqueIds(termDocumentMatrix);
-
+    private void createMinHashMatrix() {
         for (int i = 0; i < minHashMatrix.length; i++) {
             for (int j = 0; j < minHashMatrix[i].length; j++) {
                 minHashMatrix[i][j] = getMinHash(uniqueIds.get(j), permutationFunctions.get(i)); //This gets the min value for the i'th permutation for document j
@@ -30,22 +31,24 @@ public class MinHashMatrix {
     }
 
     private List<List<Integer>> getUniqueIds(TermDocumentMatrix termDocumentMatrix) {
-        List<List<Integer>> uniqueIds = new ArrayList<>();
-        for (int i = 0; i < termDocumentMatrix.getDocuments().size(); i++) {
-            uniqueIds.add(i, new ArrayList<>());
-        }
-        int maxSum = 0;
-        int uniqueId = 0;
-        for (int i = 0; i < termMatrix.length; i++) {
-            for (int j = 0; j < termMatrix[i].length; j++) {
-                uniqueId = maxSum + 1;
-                int termCount = termMatrix[i][j];
-                for (int k = 0; k < termCount; k++) {
-                    uniqueIds.get(j).add(uniqueId);
-                    uniqueId++;
-                }
+        if (uniqueIds == null) {
+            uniqueIds = new ArrayList<>();
+            for (int i = 0; i < termDocumentMatrix.getDocuments().size(); i++) {
+                uniqueIds.add(i, new ArrayList<>());
             }
-            maxSum += maxOccurrences.get(i);
+            int maxSum = 0;
+            int uniqueId = 0;
+            for (int i = 0; i < termMatrix.length; i++) {
+                for (int j = 0; j < termMatrix[i].length; j++) {
+                    uniqueId = maxSum + 1;
+                    int termCount = termMatrix[i][j];
+                    for (int k = 0; k < termCount; k++) {
+                        uniqueIds.get(j).add(uniqueId);
+                        uniqueId++;
+                    }
+                }
+                maxSum += maxOccurrences.get(i);
+            }
         }
         return uniqueIds;
     }

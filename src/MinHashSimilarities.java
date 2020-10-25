@@ -1,5 +1,3 @@
-import java.io.FileNotFoundException;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 public class MinHashSimilarities {
@@ -10,7 +8,6 @@ public class MinHashSimilarities {
     double eJacSim;
     double aJacSim;
     int numPerm;
-
 
     public MinHashSimilarities(String folder, int numPermutations) {
         this.numPerm=numPermutations;
