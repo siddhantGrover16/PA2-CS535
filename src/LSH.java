@@ -6,6 +6,7 @@ public class LSH {
     private List<List<String>> lshArrays = new ArrayList<>();
     private List<String> docNames;
     private int[][] minHashMatrix;
+    private int[][] transposedMinHash;
     private int rowsPerBand;
     private long prime;
     private Pair pair;
@@ -16,6 +17,7 @@ public class LSH {
         this.docNames = Arrays.asList(docNames);
         this.rowsPerBand = minHashMatrix.length / bands;
         this.prime = PrimeNumberUtils.getPrimeLargerThan(minHashMatrix[0].length);
+        this.transposedMinHash = transpose(minHashMatrix);
 
         Random rand = new Random();
         this.pair = new Pair(getRandomLong(this.prime, rand), getRandomLong(this.prime, rand));
@@ -27,10 +29,9 @@ public class LSH {
             lshStorage.add(new HashMap<>());
             lshArrays.add(new ArrayList<>());
         }
-        int[][] transposed = transpose(minHashMatrix);
         for (int docIdx = 0; docIdx < docNames.size(); docIdx++) {
             for (int bandIdx = 0; bandIdx < numBands; bandIdx++) {
-                int hashCode = Arrays.hashCode(Arrays.copyOfRange(transposed[docIdx], rowsPerBand * bandIdx, rowsPerBand * bandIdx + rowsPerBand));
+                int hashCode = Arrays.hashCode(Arrays.copyOfRange(transposedMinHash[docIdx], rowsPerBand * bandIdx, rowsPerBand * bandIdx + rowsPerBand));
                 int hashIndex = getHash(hashCode);
                 lshStorage.get(hashIndex).computeIfAbsent(hashIndex, s -> new ArrayList<>()).add(docNames.get(docIdx));
                 lshArrays.get(hashIndex).add(docNames.get(docIdx));
@@ -48,11 +49,11 @@ public class LSH {
 
     public ArrayList<String> nearDuplicatesOf(String docName){
         int docIndex = docNames.indexOf(docName);
-        int[][] transposed = transpose(minHashMatrix);
+
         HashSet<String> similarDocsSet = new HashSet<>();
         for (int bandIdx = 0; bandIdx < numBands; bandIdx++) {
             HashMap<Integer, List<String>> similarBands = lshStorage.get(docIndex);
-            int hashIndex = getHash(Arrays.hashCode(Arrays.copyOfRange(transposed[docIndex], rowsPerBand * bandIdx, rowsPerBand * bandIdx + rowsPerBand)));
+            int hashIndex = getHash(Arrays.hashCode(Arrays.copyOfRange(transposedMinHash[docIndex], rowsPerBand * bandIdx, rowsPerBand * bandIdx + rowsPerBand)));
             List<String> similarDocs = similarBands.getOrDefault(hashIndex, new ArrayList<>());
             similarDocsSet.addAll(similarDocs);
         }
