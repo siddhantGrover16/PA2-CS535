@@ -3,12 +3,12 @@ import java.util.List;
 import java.util.Random;
 
 public class MinHashMatrix {
-    int[][] minHashMatrix;
-    int[][] termMatrix;
-    List<Integer> maxOccurrences;
-    List<List<Integer>> uniqueIds;
-    List<Pair> permutationFunctions;
-    long prime;
+    private int[][] minHashMatrix;
+    private int[][] termMatrix;
+    private List<Integer> maxOccurrences;
+    private List<List<Integer>> uniqueIds;
+    private List<Pair> permutationFunctions;
+    private long prime;
 
     public MinHashMatrix(TermDocumentMatrix termDocumentMatrix, int numPermutations) {
         minHashMatrix = new int[numPermutations][termDocumentMatrix.getDocuments().size()];
