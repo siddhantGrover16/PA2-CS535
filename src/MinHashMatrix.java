@@ -88,7 +88,7 @@ public class MinHashMatrix {
         }
     }
 
-    public int[][] getIntMatrix() {
+    public int[][] minHashMatrix() {
         return minHashMatrix;
     }
 

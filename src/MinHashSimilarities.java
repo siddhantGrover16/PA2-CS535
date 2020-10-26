@@ -1,25 +1,24 @@
 import java.util.List;
 
 public class MinHashSimilarities {
-    int[][] tdMatrix;
-    int[][] mhMatrix;
+    private int[][] tdMatrix;
+    private int[][] mhMatrix;
     private List<String> indexedDocuments;
-    MinHash minhash;
-    double eJacSim;
-    double aJacSim;
-    int numPerm;
+    private MinHash minhash;
+    private int numPerm;
 
     public MinHashSimilarities(String folder, int numPermutations) {
         this.numPerm=numPermutations;
 
         minhash = new MinHash(folder, numPermutations);
-        tdMatrix = minhash.termDocumentMatrix.termDocumentMatrix();
+        tdMatrix = minhash.termDocumentMatrix();
         mhMatrix = minhash.minHashMatrix();
-        indexedDocuments = minhash.termDocumentMatrix.getDocuments();
+        indexedDocuments = minhash.allDocs();
     }
 
     public double exactJaccard(String file1, String file2) {
         // indexedDocuments = minhash.termDocumentMatrix.getDocuments();
+        double eJacSim;
         int d1 = indexedDocuments.indexOf(file1);
         int d2 = indexedDocuments.indexOf(file2);
         eJacSim= computeEJac(d1,d2);
@@ -46,6 +45,7 @@ public class MinHashSimilarities {
     }
 
     public double approximateJaccard(String file1, String file2) {
+        double aJacSim;
         int d1 = indexedDocuments.indexOf(file1);
         int d2 = indexedDocuments.indexOf(file2);
         aJacSim = computeAJac(d1,d2);
