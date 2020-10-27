@@ -16,7 +16,8 @@ public class MinHash {
 
         numPerm = numPermutations;
         File dir = new File(folder);
-        File[] files = Arrays.stream(dir.listFiles()).filter(file -> file.getName().endsWith(".txt")).toArray(File[]::new);
+        File[] files = dir.listFiles();
+
         createTermDocumentMatrix(files);
         minHashMatrix = new MinHashMatrix(termDocumentMatrix, numPermutations);
     }
@@ -24,9 +25,9 @@ public class MinHash {
     private void createTermDocumentMatrix(File[] files) {
         if (files != null) {
             for (File file : files) {
-                try (Stream<String> stream = Files.lines(file.toPath(), Charset.forName("Windows-1252"))) {
+                try (Stream<String> stream = Files.lines(file.toPath())) {
                     List<String> processedTerms = stream.map(line -> {
-                        List<String> terms = Arrays.asList(line.split("[,|.$':; ]"));
+                        List<String> terms = Arrays.asList(line.split(",.':; "));
                         return terms.stream().map(String::toLowerCase).filter(term -> term.length() > 2 && !term.equalsIgnoreCase("the")).collect(Collectors.toList());
                     }).filter(terms -> terms.size() > 0).flatMap(List::stream).collect(Collectors.toList());
                     termDocumentMatrix.indexTerms(file, processedTerms);

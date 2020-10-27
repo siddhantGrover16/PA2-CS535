@@ -3,7 +3,6 @@ import java.util.*;
 public class LSH {
     private int numBands;
     private List<HashMap<Integer, List<String>>> lshStorage = new ArrayList<>();
-    private List<List<String>> lshArrays = new ArrayList<>();
     private List<String> docNames;
     private int[][] transposedMinHash;
     private int rowsPerBand;
@@ -43,7 +42,6 @@ public class LSH {
         return new ArrayList<>(similarDocsSet);
     }
 
-    //Transpose a matrix for fast access to columns (min hash matrix has rows for terms and columns for doc ids)
     public static int[][] transpose(int arr[][]){
         int m = arr.length;
         int n = arr[0].length;
@@ -56,5 +54,7 @@ public class LSH {
         }
 
         return ret;
+
+        //dog;;;cat => dog cat or dogcat
     }
 }

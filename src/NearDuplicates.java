@@ -20,13 +20,19 @@ public class NearDuplicates {
         lsh = new LSH(minHash.minHashMatrix(), files, numBands);
     }
 
-    private int getNumBands(double s) {
-        int k = minHash.numPermutations();
-        //need to estimate value of B for LSH.
-        //r*b = k
-        // b = s^-r
-        //return (int) Math.floor(Math.pow(s, -1*r));
-        return 0;
+    private int getNumBands(double similarity) {
+        double rightSide = Math.log(similarity) * minHash.numPermutations();
+        int bestMatch = 1;
+        double bestDifference = Double.MAX_VALUE;
+        for (int b = 1; b < minHash.numPermutations(); b++) {
+            double leftSide = b * Math.log(1.0/b);
+            double difference = Math.abs(rightSide - leftSide);
+            if (difference < bestDifference) {
+                bestDifference  = difference;
+                bestMatch = b;
+            }
+        }
+        return bestMatch;
     }
 
     public List<String> nearDuplicateDetector(String documentName) {

@@ -6,7 +6,7 @@ public class MinHashAccuracy {
     private int numPerm;
     private double errorPar;
 
-    public MinHashAccuracy(String folder, int numPerm, double errorPar){
+    public MinHashAccuracy(String folder, int numPerm, double errorPar) {
         this.directory=folder;
         this.numPerm=numPerm;
         this.errorPar=errorPar;
