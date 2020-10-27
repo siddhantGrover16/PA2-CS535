@@ -32,7 +32,7 @@ System.currentTimeinMillis()or by using  System.nanoTime().
         mhs=new MinHashSimilarities(folder,numPerm);
         long endtime = System.currentTimeMillis();
          long timetocreate=endtime-starttime;
-        System.out.print("Time taken to create instance "+ timetocreate/1000);
+        System.out.println("Time taken to create instance "+ timetocreate*1.0/1000 +"seconds");
 
         starttime = System.currentTimeMillis();
         for(int i=0; i<mhs.getDocCount()-1;i++){
@@ -42,7 +42,7 @@ System.currentTimeinMillis()or by using  System.nanoTime().
         }
         endtime = System.currentTimeMillis();
         long exactJtime= endtime-starttime;
-        System.out.print("Time taken to get Exact Jaccard for all pairs "+ exactJtime/1000);
+        System.out.println("Time taken to get Exact Jaccard for all pairs "+ (exactJtime*1.0)/1000 + "seconds");
 
 
         starttime = System.currentTimeMillis();
@@ -55,7 +55,7 @@ System.currentTimeinMillis()or by using  System.nanoTime().
         endtime = System.currentTimeMillis();
         long approxJtime= endtime-starttime;
 
-        System.out.print("Time taken to get Approximate for all pairs "+  approxJtime/1000);
+        System.out.println("Time taken to get Approximate for all pairs "+  (approxJtime* 1.0)/1000 + "seconds");
     }
 
 

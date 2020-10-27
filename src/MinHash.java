@@ -13,10 +13,10 @@ public class MinHash {
 
     public MinHash(String folder, int numPermutations) {
         termDocumentMatrix = new TermDocumentMatrix();
+
         numPerm = numPermutations;
         File dir = new File(folder);
         File[] files = Arrays.stream(dir.listFiles()).filter(file -> file.getName().endsWith(".txt")).toArray(File[]::new);
-
         createTermDocumentMatrix(files);
         minHashMatrix = new MinHashMatrix(termDocumentMatrix, numPermutations);
     }

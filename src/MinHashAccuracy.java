@@ -1,15 +1,25 @@
 import java.util.List;
 
 public class MinHashAccuracy {
-    public MinHashAccuracy(){
+    private String directory;
+    private int inaccuratePairs;
+    private int numPerm;
+    private double errorPar;
+
+    public MinHashAccuracy(String folder, int numPerm, double errorPar){
+        this.directory=folder;
+        this.numPerm=numPerm;
+        this.errorPar=errorPar;
+        accuracy();
     }
 
-    public int accuracy(String directory, int numPerm, double errorPar){
+    public int accuracy(){
         int inaccuratePairs = 0;
         double eJac;
         double aJac;
 
         MinHashSimilarities mhs = new MinHashSimilarities(directory,numPerm);
+        int numdocs = mhs.getDocCount();
         int[][] tdMatrix= mhs.getTdMatrix();
 
         for (int i=0 ; i <tdMatrix[0].length-1;i++){//  first doc of pair  0.....n-1
@@ -22,6 +32,9 @@ public class MinHashAccuracy {
                 }
             }
         }
+
+        System.out.println(" The number of inaacurate pairs for " + numPerm + " permutions  with error parameter "+ errorPar + " is "+ inaccuratePairs + ". The total number of distinct pair are " + (numdocs * (numdocs-1))/2);
+        System.out.println( "-x-x-x-x-x-xx-x-x-x--x--x-x-x-x-x-x-x-x-x-x-x--x-x-x-x-x--x-x-x-x-x-x-x");
 
         return inaccuratePairs;
     }

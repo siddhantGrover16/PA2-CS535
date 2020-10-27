@@ -1,11 +1,10 @@
 public class RoughTest {
     public static void main(String[] args) {
 
-        MinHashSimilarities minHash = new MinHashSimilarities("TestFiles",400
-        );
+        MinHashSimilarities minHash = new MinHashSimilarities("src/space",400);
         int[][] tc =minHash.getTdMatrix();
         int[][] mh = minHash.getMhMatrix();
-        int[] mhsig= minHash.minHashSig("baseball298.txt");
+       // int[] mhsig= minHash.minHashSig("baseball298.txt");
 
         System.out.println("Term_Doc");
         System.out.println("Number of Terms is "+ minHash.getTermCount());
@@ -23,7 +22,7 @@ public class RoughTest {
         }
         System.out.println("------------------------------------------------");
         System.out.println("Min_Hash");
-        System.out.println(" Number of perms is "+ minHash.numPerm);
+      //  System.out.println(" Number of perms is "+ minHash.numPerm);
         System.out.println("Number of docs is "+ minHash.getDocCount());
 
         System.out.println(" ");
@@ -45,9 +44,9 @@ public class RoughTest {
 
         System.out.println("minHashSig of baseball298");
 
-        for (int i = 0; i < mhsig.length; i++) {
-            System.out.print ( mhsig[i] + " ");
-        }
+//        for (int i = 0; i < mhsig.length; i++) {
+//            System.out.print ( mhsig[i] + " ");
+//        }
 
 
 
