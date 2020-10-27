@@ -32,11 +32,7 @@ public class MinHashTime {
         double[][] ejac = new double [mhs.getDocCount()][mhs.getDocCount()];
         double[][] ajac = new double [mhs.getDocCount()][mhs.getDocCount()];
          long timetocreate=endtime-starttime;
-<<<<<<< Updated upstream
         System.out.println("Time taken to create instance "+ timetocreate*1.0/1000 +"seconds");
-=======
-        System.out.println("Time taken to create instance "+ timetocreate);
->>>>>>> Stashed changes
 
         starttime = System.currentTimeMillis();
         for(int i=0; i<mhs.getDocCount()-1;i++){
@@ -46,11 +42,7 @@ public class MinHashTime {
         }
         endtime = System.currentTimeMillis();
         long exactJtime= endtime-starttime;
-<<<<<<< Updated upstream
         System.out.println("Time taken to get Exact Jaccard for all pairs "+ (exactJtime*1.0)/1000 + "seconds");
-=======
-        System.out.println("Time taken to get Exact Jaccard for all pairs "+ exactJtime);
->>>>>>> Stashed changes
 
 
         starttime = System.currentTimeMillis();
@@ -63,17 +55,7 @@ public class MinHashTime {
         endtime = System.currentTimeMillis();
         long approxJtime= endtime-starttime;
 
-<<<<<<< Updated upstream
         System.out.println("Time taken to get Approximate for all pairs "+  (approxJtime* 1.0)/1000 + "seconds");
-=======
-        for(int i=0; i<mhs.getDocCount()-1;i++){
-            for(int j=i+1;j<mhs.getDocCount();j++){
-                System.out.println("EJAC: " + ejac[i][j] + "AJAC: " + ajac[i][j]);
-            }
-        }
-
-        System.out.println("Time taken to get Approximate for all pairs "+  approxJtime);
->>>>>>> Stashed changes
     }
 
 
