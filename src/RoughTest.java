@@ -15,12 +15,12 @@ public class RoughTest {
 
 
 
-        for( int i=0; i< tc.length;i++){//
-            for(int j =0 ;j<tc[0].length;j++){
-                System.out.print(tc[i][j]+ " ");
-            }
-            System.out.println();
-        }
+//        for( int i=0; i< tc.length;i++){//
+//            for(int j =0 ;j<tc[0].length;j++){
+//                System.out.print(tc[i][j]+ " ");
+//            }
+//            System.out.println();
+//        }
         System.out.println("------------------------------------------------");
         System.out.println("Min_Hash");
       //  System.out.println(" Number of perms is "+ minHash.numPerm);

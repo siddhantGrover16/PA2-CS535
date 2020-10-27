@@ -25,6 +25,8 @@ public class MinHash {
     private void createTermDocumentMatrix(File[] files) {
         if (files != null) {
             for (File file : files) {
+             //   System.out.println(file.getName());
+             //   try (Stream<String> stream = Files.lines(file.toPath(),Charset.forName("Windows-1252"))) {
                 try (Stream<String> stream = Files.lines(file.toPath())) {
                     List<String> processedTerms = stream.map(line -> {
                         List<String> terms = Arrays.asList(line.split(",.':; "));
