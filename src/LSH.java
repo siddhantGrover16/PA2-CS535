@@ -35,8 +35,7 @@ public class LSH {
         for (int bandIdx = 0; bandIdx < numBands; bandIdx++) {
             HashMap<Integer, List<String>> similarBands = lshStorage.get(bandIdx);
             int hashIndex = Arrays.hashCode(Arrays.copyOfRange(transposedMinHash[docIndex], rowsPerBand * bandIdx, rowsPerBand * bandIdx + rowsPerBand));
-            List<String> similarDocs = similarBands.getOrDefault(hashIndex, new ArrayList<>());
-            similarDocsSet.addAll(similarDocs);
+            similarDocsSet.addAll(similarBands.getOrDefault(hashIndex, new ArrayList<>()));
         }
         similarDocsSet.remove(docName);
         return new ArrayList<>(similarDocsSet);
