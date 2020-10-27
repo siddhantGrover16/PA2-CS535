@@ -41,19 +41,17 @@ public class LSH {
         return new ArrayList<>(similarDocsSet);
     }
 
-    public static int[][] transpose(int arr[][]){
-        int m = arr.length;
-        int n = arr[0].length;
-        int ret[][] = new int[n][m];
+    public static int[][] transpose(int input[][]){
+        int m = input.length;
+        int n = input[0].length;
+        int output[][] = new int[n][m];
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                ret[j][i] = arr[i][j];
+                output[j][i] = input[i][j];
             }
         }
 
-        return ret;
-
-        //dog;;;cat => dog cat or dogcat
+        return output;
     }
 }
