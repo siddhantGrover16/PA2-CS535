@@ -1,98 +1,62 @@
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.MalformedInputException;
+import java.nio.file.Files;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MinHash {
+   private int numPerm;
+   private MinHashMatrix minHashMatrix;
+   private TermDocumentMatrix termDocumentMatrix;
 
-   int numPerm;
-   String folderName;
-   int[][] mhMatrix;
-   int[][] tdMatrix;
-   int numTerms;
-   String[] termMatrix;
-   String[] docs;
+    public MinHash(String folder, int numPermutations) {
+        termDocumentMatrix = new TermDocumentMatrix();
 
+        numPerm = numPermutations;
+        File dir = new File(folder);
+        File[] files = dir.listFiles();
 
+        createTermDocumentMatrix(files);
+        minHashMatrix = new MinHashMatrix(termDocumentMatrix, numPermutations);
+    }
 
-    public MinHash(String folder, int numPermutations){
-
-        File dir = new File("src/"+folder);
-        File [] files = dir.listFiles();
-        String docs[] = new String[files.length];
-        ArrayList<String> Terms = new ArrayList<String>();
-        ArrayList<String>[] Dterms = new ArrayList[files.length];
-
-        for(int i=0;i< docs.length;i++){
-            docs[i]=files[i].getName();
-        }
-        for (int i =0; i< files.length;i++){
-            Dterms[i] = new ArrayList<String>();
-            try {
-                File myObj = new File(files[i].getAbsolutePath());
-                Scanner myReader = new Scanner(myObj);
-                while (myReader.hasNextLine()) {
-                    String data = myReader.nextLine();
-                    String[] terms = data.split("[,|.$':; ]");
-                    for (int j=0; j< terms.length;j++){
-                        Terms.add(terms[j]);// adding term to set of all terms
-                        Dterms[i].add(terms[j]);// adding term to set of terms in particular document i
-                    }
-
-                    //System.out.println(data);
+    private void createTermDocumentMatrix(File[] files) {
+        if (files != null) {
+            for (File file : files) {
+             //   System.out.println(file.getName());
+             //   try (Stream<String> stream = Files.lines(file.toPath(),Charset.forName("Windows-1252"))) {
+                try (Stream<String> stream = Files.lines(file.toPath())) {
+                    List<String> processedTerms = stream.map(line -> {
+                        List<String> terms = Arrays.asList(line.split(",.':; "));
+                        return terms.stream().map(String::toLowerCase).filter(term -> term.length() > 2 && !term.equalsIgnoreCase("the")).collect(Collectors.toList());
+                    }).filter(terms -> terms.size() > 0).flatMap(List::stream).collect(Collectors.toList());
+                    termDocumentMatrix.indexTerms(file, processedTerms);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
-                myReader.close();
-
-            } catch (FileNotFoundException e) {
-                System.out.println("An error occurred.");
-                e.printStackTrace();
-            }
-
-        }
-
-
-
-        for (int i = 0; i < Terms.size();i++) {
-            if (Terms.get(i) == "the") {
-                Terms.remove(i);
-            }
-            if (Terms.get(i).length() <= 2) {
-                Terms.remove(i);
             }
         }
-        
+    }
 
-        Set<String> unionTerms = new HashSet<String>(Terms);// removes all duplicates from the arraylist of universal terms
-        numTerms=unionTerms.size();
-
-        }
-
-
-
-
-    public String[] allDocs(){
-
-        for(int i=0 ; i< docs.length;i++){
-            System.out.println(docs[i]);
-        }
-        return docs;
+    public List<String> allDocs(){
+        return termDocumentMatrix.getDocuments();
     }
 
     public int[][] minHashMatrix(){
-
-        return mhMatrix;
+        return minHashMatrix.minHashMatrix();
     }
-    public int[][] termDocumenMatrix(){
 
-        return tdMatrix;
+    public int[][] termDocumentMatrix(){
+        return termDocumentMatrix.termDocumentMatrix();
     }
+
     public int numTerms(){
-
-        return numTerms;
+        return termDocumentMatrix.getTerms().size();
     }
+
     public int numPermutations(){
-
         return numPerm ;
-
     }
-
-
 }
