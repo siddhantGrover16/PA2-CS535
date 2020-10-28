@@ -4,20 +4,21 @@ public class Test {
         //MinHashTime Test
       MinHashTime mht = new MinHashTime();
       MinHashAccuracy mha=new MinHashAccuracy();
+      String folder ="src/TestFiles";
 
-      mht.timer("src/TestFiles",600);
+      mht.timer(folder,600);
 
-      mha.accuracy("src/TestFiles",400,0.04);
-      mha.accuracy("src/TestFiles",400,0.07);
-      mha.accuracy("src/TestFiles",400,0.09);
+      mha.accuracy(folder,400,0.04);
+      mha.accuracy(folder,400,0.07);
+      mha.accuracy(folder,400,0.09);
 
-      mha.accuracy("src/TestFiles",600,0.04);
-      mha.accuracy("src/TestFiles",600,0.07);
-      mha.accuracy("src/TestFiles",600,0.09);
+      mha.accuracy(folder,600,0.04);
+      mha.accuracy(folder,600,0.07);
+      mha.accuracy(folder,600,0.09);
 
-      mha.accuracy("src/TestFiles",800,0.04);
-      mha.accuracy("src/TestFiles",800,0.07);
-      mha.accuracy("src/TestFiles",800,0.09);
+      mha.accuracy(folder,800,0.04);
+      mha.accuracy(folder,800,0.07);
+      mha.accuracy(folder,800,0.09);
 
     }
 }
