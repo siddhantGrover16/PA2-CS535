@@ -22,7 +22,11 @@ public class LSH {
         }
         for (int docIdx = 0; docIdx < docNames.size(); docIdx++) {
             for (int bandIdx = 0; bandIdx < numBands; bandIdx++) {
-                int hashCode = Arrays.hashCode(Arrays.copyOfRange(transposedMinHash[docIdx], rowsPerBand * bandIdx, rowsPerBand * bandIdx + rowsPerBand));
+                int rowsTo = rowsPerBand * bandIdx + rowsPerBand;
+                if (bandIdx + 1 == numBands) {
+                    rowsTo = transposedMinHash[docIdx].length;
+                }
+                int hashCode = Arrays.hashCode(Arrays.copyOfRange(transposedMinHash[docIdx], rowsPerBand * bandIdx, rowsTo));
                 lshStorage.get(bandIdx).computeIfAbsent(hashCode, s -> new ArrayList<>()).add(docNames.get(docIdx));
             }
         }
@@ -31,10 +35,18 @@ public class LSH {
     public ArrayList<String> nearDuplicatesOf(String docName){
         int docIndex = docNames.indexOf(docName);
 
+        if (docIndex < 0) {
+            return new ArrayList<>();
+        }
+
         HashSet<String> similarDocsSet = new HashSet<>();
         for (int bandIdx = 0; bandIdx < numBands; bandIdx++) {
+            int rowsTo = rowsPerBand * bandIdx + rowsPerBand;
+            if (bandIdx + 1 == numBands) {
+                rowsTo = transposedMinHash[docIndex].length;
+            }
             HashMap<Integer, List<String>> similarBands = lshStorage.get(bandIdx);
-            int hashIndex = Arrays.hashCode(Arrays.copyOfRange(transposedMinHash[docIndex], rowsPerBand * bandIdx, rowsPerBand * bandIdx + rowsPerBand));
+            int hashIndex = Arrays.hashCode(Arrays.copyOfRange(transposedMinHash[docIndex], rowsPerBand * bandIdx, rowsTo));
             similarDocsSet.addAll(similarBands.getOrDefault(hashIndex, new ArrayList<>()));
         }
         similarDocsSet.remove(docName);

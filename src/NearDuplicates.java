@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NearDuplicates {
@@ -21,18 +22,38 @@ public class NearDuplicates {
     }
 
     private int getNumBands(double similarity) {
-        double rightSide = Math.log(similarity) * minHash.numPermutations();
+        if (similarity == 1.0) {
+            return 1;
+        } else if (similarity <= 0.0) {
+            return this.minHash.numPermutations();
+        }
         int bestMatch = 1;
+        int r = 0;
+        int[] factorsOfNumPermutations = getFactors(this.minHash.numPermutations());
+        //k =r*b
         double bestDifference = Double.MAX_VALUE;
-        for (int b = 1; b < minHash.numPermutations(); b++) {
-            double leftSide = b * Math.log(1.0/b);
-            double difference = Math.abs(rightSide - leftSide);
-            if (difference < bestDifference) {
-                bestDifference  = difference;
-                bestMatch = b;
+        for (int i = 0; i < factorsOfNumPermutations.length; i++) {
+            int rows = factorsOfNumPermutations[i];
+            for (int b = 1; b < minHash.numPermutations(); b++) {
+                double leftSide = Math.pow((1.0 / b), (1.0 / rows));
+                double difference = Math.abs(leftSide - similarity);
+                if (difference < bestDifference) {
+                    bestDifference = difference;
+                    bestMatch = b;
+                    r = rows;
+                }
             }
         }
         return bestMatch;
+    }
+
+    private int[] getFactors(int numPermutations) {
+        List<Integer> factors = new ArrayList<>();
+        for (int i = 1 ; i <= numPermutations ; ++i) {
+            if ( numPermutations % i == 0)
+                factors.add(i);
+        }
+        return factors.stream().mapToInt(i->i).toArray();
     }
 
     public List<String> nearDuplicateDetector(String documentName) {

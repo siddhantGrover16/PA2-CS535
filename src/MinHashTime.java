@@ -14,30 +14,22 @@ of documents in the collection. Report the time taken for this task.
 System.currentTimeinMillis()or by using  System.nanoTime().
      */
 public class MinHashTime {
-    String folder;
-    int numPerm;
-  //  Pair timerPair;
-    MinHashSimilarities mhs;
+    private MinHashSimilarities mhs;
 
-    public MinHashTime(String folder,int numPerm){
-        this.folder=folder;
-        this.numPerm =numPerm;
-        timer(folder,numPerm);
+    public MinHashTime(){
     }
 
-    public void timer(String folder,int numPerm){
+    public void timer(String folder, int numPerm){
        long starttime = System.currentTimeMillis();
         mhs=new MinHashSimilarities(folder,numPerm);
         long endtime = System.currentTimeMillis();
-        double[][] ejac = new double [mhs.getDocCount()][mhs.getDocCount()];
-        double[][] ajac = new double [mhs.getDocCount()][mhs.getDocCount()];
          long timetocreate=endtime-starttime;
         System.out.println("Time taken to create instance "+ timetocreate*1.0/1000 +"seconds");
 
         starttime = System.currentTimeMillis();
         for(int i=0; i<mhs.getDocCount()-1;i++){
             for(int j=i+1;j<mhs.getDocCount();j++){
-                ejac[i][j] = mhs.computeEJac(i,j);
+                mhs.computeEJac(i,j);
             }
         }
         endtime = System.currentTimeMillis();
@@ -48,7 +40,7 @@ public class MinHashTime {
         starttime = System.currentTimeMillis();
         for(int i=0; i<mhs.getDocCount()-1;i++){
             for(int j=i+1;j<mhs.getDocCount();j++){
-                ajac[i][j] = mhs.computeAJac(i,j);
+                mhs.computeAJac(i,j);
             }
         }
 

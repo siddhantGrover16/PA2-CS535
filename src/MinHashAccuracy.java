@@ -1,24 +1,16 @@
 import java.util.List;
 
 public class MinHashAccuracy {
-    private String directory;
-    private int inaccuratePairs;
-    private int numPerm;
-    private double errorPar;
 
-    public MinHashAccuracy(String folder, int numPerm, double errorPar) {
-        this.directory=folder;
-        this.numPerm=numPerm;
-        this.errorPar=errorPar;
-        accuracy();
+    public MinHashAccuracy() {
     }
 
-    public int accuracy(){
+    public int accuracy(String folder, int numPerm, double errorPar){
         int inaccuratePairs = 0;
         double eJac;
         double aJac;
 
-        MinHashSimilarities mhs = new MinHashSimilarities(directory,numPerm);
+        MinHashSimilarities mhs = new MinHashSimilarities(folder,numPerm);
         int numdocs = mhs.getDocCount();
         int[][] tdMatrix= mhs.getTdMatrix();
 
